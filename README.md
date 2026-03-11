@@ -63,9 +63,14 @@ Technology	Purpose
 HTML5	Page structure
 CSS3	Styling & responsive design
 JavaScript	Interactivity and dynamic UI
+
 📂 Project Structure
+
 HostelMart
 │
+
 ├── index.html
+
 ├── style.css
+
 ├── script.js
