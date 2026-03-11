@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HostelMart — Student Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a class="logo" onclick="showPage('home')">
+    Hostel<span>Mart</span>
+    <div class="logo-badge">BETA</div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Browse</a></li>
+    <li><a onclick="showPage('sell')" id="nav-sell">Sell Item</a></li>
+    <li><a onclick="showPage('my')" id="nav-my">My Listings</a></li>
+    <li><a onclick="showPage('cart')" id="nav-cart">Cart</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="cart-btn" onclick="showPage('cart')">
+      🛒
+      <div class="cart-count" id="cartCount">0</div>
+    </button>
+    <button class="btn btn-ghost" onclick="showPage('my')">👤 My Profile</button>
+    <button class="btn btn-primary" onclick="showPage('sell')">+ List Item</button>
+  </div>
+</nav>
+
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-tag">🎓 For Students, By Students</div>
+    <h1>The Hostel<br><em>Marketplace</em></h1>
+    <p>Buy and sell second-hand goods with fellow hostel students. From textbooks to appliances — find everything you need on campus.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="document.getElementById('searchInput').focus()">🔍 Browse Items</button>
+      <button class="btn btn-ghost" onclick="showPage('sell')">📦 List for Free</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat-listings">24<span>+</span></div>
+        <div class="hero-stat-label">Active Listings</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">5<span>★</span></div>
+        <div class="hero-stat-label">Avg Rating</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">₹0</div>
+        <div class="hero-stat-label">Listing Fee</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">48<span>h</span></div>
+        <div class="hero-stat-label">Avg Sale Time</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <div class="search-section">
+    <div class="search-bar-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search for textbooks, laptops, cycles, furniture..." oninput="filterListings()">
+      <div class="search-filters">
+        <select id="sortSelect" onchange="filterListings()">
+          <option value="newest">Newest</option>
+          <option value="price-low">Price: Low</option>
+          <option value="price-high">Price: High</option>
+        </select>
+        <select id="catFilter" onchange="filterListings()">
+          <option value="all">All Categories</option>
+          <option value="books">📚 Books</option>
+          <option value="electronics">💻 Electronics</option>
+          <option value="furniture">🛋️ Furniture</option>
+          <option value="appliances">🍳 Appliances</option>
+          <option value="clothing">👕 Clothing</option>
+          <option value="sports">⚽ Sports</option>
+          <option value="stationery">✏️ Stationery</option>
+          <option value="other">📦 Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="categories-section">
+    <div class="section-title">🗂️ Browse by Category</div>
+    <div class="categories-row">
+      <div class="cat-chip active" onclick="setCat('all', this)"><span>🛍️</span> All Items</div>
+      <div class="cat-chip" onclick="setCat('books', this)"><span>📚</span> Books &amp; Notes</div>
+      <div class="cat-chip" onclick="setCat('electronics', this)"><span>💻</span> Electronics</div>
+      <div class="cat-chip" onclick="setCat('furniture', this)"><span>🛋️</span> Furniture</div>
+      <div class="cat-chip" onclick="setCat('appliances', this)"><span>🍳</span> Appliances</div>
+      <div class="cat-chip" onclick="setCat('clothing', this)"><span>👕</span> Clothing</div>
+      <div class="cat-chip" onclick="setCat('sports', this)"><span>⚽</span> Sports</div>
+      <div class="cat-chip" onclick="setCat('stationery', this)"><span>✏️</span> Stationery</div>
+    </div>
+  </div>
+
+  <!-- Listings -->
+  <div class="listings-section">
+    <div class="listings-header">
+      <div class="results-count"><strong id="resultNum">0</strong> items found</div>
+      <div class="sort-row">
+        Sort by:
+        <select id="sortSelect2" onchange="document.getElementById('sortSelect').value=this.value; filterListings()">
+          <option value="newest">Newest First</option>
+          <option value="price-low">Lowest Price</option>
+          <option value="price-high">Highest Price</option>
+        </select>
+      </div>
+    </div>
+    <div class="listings-grid" id="listingsGrid"></div>
+  </div>
+</div>
+
+<!-- ═══ SELL PAGE ═══ -->
+<div class="page" id="page-sell">
+  <div class="sell-page">
+    <div class="sell-header">
+      <h2>📦 List an Item</h2>
+      <p>Fill in the details below. Listings are free and visible to all hostel students instantly.</p>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">📋 Item Details</div>
+
+      <div class="form-group">
+        <label>Item Name <span>*</span></label>
+        <input type="text" id="sellTitle" placeholder="e.g. Engineering Physics Textbook (2nd Ed.)">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category <span>*</span></label>
+          <select id="sellCat" style="width:100%">
+            <option value="">Select category...</option>
+            <option value="books">📚 Books &amp; Notes</option>
+            <option value="electronics">💻 Electronics</option>
+            <option value="furniture">🛋️ Furniture</option>
+            <option value="appliances">🍳 Appliances</option>
+            <option value="clothing">👕 Clothing</option>
+            <option value="sports">⚽ Sports</option>
+            <option value="stationery">✏️ Stationery</option>
+            <option value="other">📦 Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Asking Price (₹) <span>*</span></label>
+          <input type="number" id="sellPrice" placeholder="e.g. 250" min="1">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Original Price (₹) — optional</label>
+        <input type="number" id="sellOrigPrice" placeholder="e.g. 500" min="1">
+      </div>
+
+      <div class="form-group">
+        <label>Item Condition <span>*</span></label>
+        <div class="condition-row">
+          <div class="cond-btn" onclick="selectCond('Like New', this)">✨ Like New</div>
+          <div class="cond-btn" onclick="selectCond('Good', this)">👍 Good</div>
+          <div class="cond-btn" onclick="selectCond('Fair', this)">🤔 Fair</div>
+          <div class="cond-btn" onclick="selectCond('For Parts', this)">🔧 For Parts</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description <span>*</span></label>
+        <textarea id="sellDesc" placeholder="Describe your item — condition, usage, what's included, reason for selling..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Pick an Emoji for your listing</label>
+        <div class="emoji-picker" id="emojiPicker">
+          <!-- Will be filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">👤 Seller Info</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name <span>*</span></label>
+          <input type="text" id="sellName" placeholder="e.g. Arjun Sharma">
+        </div>
+        <div class="form-group">
+          <label>Room / Block</label>
+          <input type="text" id="sellRoom" placeholder="e.g. B-204">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contact (WhatsApp / UPI ID)</label>
+        <input type="text" id="sellContact" placeholder="e.g. 9876543210">
+      </div>
+    </div>
+
+    <div class="submit-btn-wrap">
+      <button class="btn btn-primary" onclick="submitListing()">🚀 Publish Listing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MY LISTINGS PAGE ═══ -->
+<div class="page" id="page-my">
+  <div class="my-page">
+    <h2>👤 My Listings</h2>
+    <p class="sub">Manage your active listings and track what you've saved.</p>
+
+    <div class="my-tabs">
+      <div class="my-tab active" onclick="switchTab('active', this)">
+        Active <span class="tab-badge" id="activeCount">0</span>
+      </div>
+      <div class="my-tab" onclick="switchTab('saved', this)">
+        Saved <span class="tab-badge" id="savedCount">0</span>
+      </div>
+    </div>
+
+    <div id="myTabContent"></div>
+  </div>
+</div>
+
+<!-- ═══ CART PAGE ═══ -->
+<div class="page" id="page-cart">
+  <div class="cart-page">
+    <h2>🛒 Your Cart</h2>
+    <div id="cartContent"></div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-img" id="modalImg"></div>
+    <div class="modal-content">
+      <div class="modal-meta">
+        <div>
+          <div class="modal-title" id="modalTitle"></div>
+        </div>
+        <div class="modal-price-wrap">
+          <div class="modal-price" id="modalPrice"></div>
+          <div class="modal-price-og" id="modalPriceOg"></div>
+        </div>
+      </div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-seller-card">
+        <div class="modal-seller-av" id="modalSellerAv"></div>
+        <div>
+          <div class="modal-seller-name" id="modalSellerName"></div>
+          <div class="modal-seller-info" id="modalSellerInfo"></div>
+        </div>
+        <div class="modal-seller-badge">✅ Verified Student</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modalWishBtn" onclick="toggleWishFromModal()">♡ Save</button>
+        <button class="btn btn-accent2" onclick="messageFromModal()">💬 Message</button>
+        <button class="btn btn-primary" onclick="addToCartFromModal()">🛒 Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
